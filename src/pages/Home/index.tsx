@@ -33,7 +33,7 @@ function Home() {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat,
               beatae autem quis voluptates unde vitae.
             </h3>
-            <Button>BOTÃO</Button>
+            <button onClick={() => console.log("oi")}>BOTÃO</button>
           </TxtContainer>
         </HomeContainer>
       </div>
@@ -148,6 +148,21 @@ export const TxtContainer = styled.div`
   h3 {
     margin-top: 25px;
   }
+  button {
+    outline: none;
+    border: none;
+    font-weight: bold;
+    color: ${(props) => props.theme.colors.primary};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    height: 40px;
+    width: 100%;
+    cursor: pointer;
+    background: ${(props) => props.theme.colors.search};
+    border-radius: 5px;
+  }
   @media only screen and (max-width: 1280px) {
     padding: 0px;
   }
@@ -167,15 +182,4 @@ export const TxtContainer = styled.div`
   @media only screen and (max-width: 375px) {
     padding: 10px;
   }
-`;
-export const Button = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-  height: 40px;
-  width: 100%;
-  cursor: pointer;
-  background: ${(props) => props.theme.colors.search};
-  border-radius: 5px;
 `;
