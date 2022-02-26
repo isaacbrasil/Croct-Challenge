@@ -15,8 +15,10 @@ function Home() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <GlobalStyle />
-        <Title>Olá</Title>
-        <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
+        <Header>
+          Croct
+          <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
+        </Header>
       </div>
     </ThemeProvider>
   );
@@ -26,5 +28,15 @@ export default Home;
 
 export const Title = styled.div`
   font-size: 45px;
-  color: ${(props) => props.theme.colors.primary});;
+  color: ${(props) => props.theme.colors.search});
+`;
+export const Header = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 25px;
+  color: ${(props) => props.theme.colors.primary};
+  background: ${(props) => props.theme.colors.search};
 `;
