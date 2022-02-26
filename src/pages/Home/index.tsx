@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import GlobalStyle from "../../styles/global";
 import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
@@ -6,38 +6,51 @@ import light from "../../styles/themes/light";
 import dark from "../../styles/themes/dark";
 import SwitchComponent from "../../components/Switch";
 import { Investor } from "../../assets/Investor";
+import {
+  CroctProvider,
+  useEvaluation,
+  Personalization,
+  Slot,
+  useContent,
+  useCroct,
+} from "@croct/plug-react";
+import { ReactElement, Suspense } from "react";
 
 function Home() {
   const [theme, setTheme] = useState(light);
+
   const toggleTheme = () => {
     setTheme(theme.title === "light" ? dark : light);
   };
+
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <GlobalStyle />
-        <Header>
-          Croct
-          <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
-        </Header>
-        <HomeContainer>
-          <ImgContainer>
-            <Investor />
-          </ImgContainer>
-          <TxtContainer>
-            <h1>
-              <span> Lorem ipsum </span> dolor sit amet consectetur adipisicing
-              elit.
-            </h1>
-            <h3>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat,
-              beatae autem quis voluptates unde vitae.
-            </h3>
-            <button onClick={() => console.log("oi")}>BOTÃO</button>
-          </TxtContainer>
-        </HomeContainer>
-      </div>
-    </ThemeProvider>
+    <CroctProvider appId="00000000-0000-0000-0000-000000000000">
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <GlobalStyle />
+          <Header>
+            Croct
+            <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
+          </Header>
+          <HomeContainer>
+            <ImgContainer>
+              <Investor />
+            </ImgContainer>
+            <TxtContainer>
+              <h1>
+                <span> Lorem ipsum </span> dolor sit amet consectetur
+                adipisicing elit.
+              </h1>
+              <h3>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Placeat, beatae autem quis voluptates unde vitae.
+              </h3>
+              <button onClick={() => console.log("oi")}>BOTÃO</button>
+            </TxtContainer>
+          </HomeContainer>
+        </div>
+      </ThemeProvider>
+    </CroctProvider>
   );
 }
 
