@@ -224,21 +224,17 @@ export const ButtonHeaderContainer = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
   @media only screen and (max-width: 820px) {
-    margin-top: 15px;
-    margin-bottom: -70px;
+    margin-top: 50px;
   }
   @media only screen and (max-width: 414px) {
-    margin-top: 15px;
-    margin-bottom: -70px;
+    margin-top: 50px;
   }
   @media only screen and (max-width: 375px) {
-    margin-top: 15px;
-    margin-bottom: -70px;
+    margin-top: 50px;
   }
 
   @media only screen and (max-width: 280px) {
-    margin-top: 15px;
-    margin-bottom: -70px;
+    margin-top: 50px;
   }
 `;
 export const ButtonContainer = styled.div`
