@@ -21,8 +21,8 @@ const SwitchComponent: React.FC<Props> = ({ toggleTheme }) => {
           height={10}
           width={40}
           handleDiameter={15}
-          offColor={shade(0.15, colors.primary)}
-          onColor={colors.secundary}
+          offColor={shade(0.15, colors.background)}
+          onColor={colors.background}
         />
       </Container>
     </>

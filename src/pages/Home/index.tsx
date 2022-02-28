@@ -16,7 +16,51 @@ import {
 } from "@croct/plug-react";
 import { ReactElement, Suspense } from "react";
 
-function Home() {
+const fallbackBanner: HomeBanner = {
+  title: "Default title",
+  subtitle: "Default subtitle",
+  cta: {
+    label: "Try now",
+    link: "https://croct.com",
+  },
+};
+
+type HomeBanner = {
+  title: string;
+  subtitle: string;
+  cta: {
+    label: string;
+    link: string;
+  };
+};
+
+function DeveloperButton(): ReactElement {
+  const croct = useCroct();
+  const setPersona = useCallback(
+    () => croct.user.edit().set("custom.persona", "developer").save(),
+    [croct]
+  );
+  return <button onClick={setPersona}>I'm a developer</button>;
+}
+
+function MarketerButton(): ReactElement {
+  const croct = useCroct();
+  const setPersona = useCallback(
+    () => croct.user.edit().set("custom.persona", "marketer").save(),
+    [croct]
+  );
+  return <button onClick={setPersona}>I'm a marketer</button>;
+}
+function HackerButton(): ReactElement {
+  const croct = useCroct();
+  const setPersona = useCallback(
+    () => croct.user.edit().set("custom.persona", "hacker").save(),
+    [croct]
+  );
+  return <button onClick={setPersona}>I'm a hacker</button>;
+}
+
+function Home(): ReactElement {
   const [theme, setTheme] = useState(light);
 
   const toggleTheme = () => {
@@ -32,20 +76,34 @@ function Home() {
             Croct
             <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
           </Header>
+          <ButtonHeaderContainer>
+            <ButtonContainer>
+              <DeveloperButton />
+              <MarketerButton />
+              <HackerButton />
+            </ButtonContainer>
+          </ButtonHeaderContainer>
           <HomeContainer>
             <ImgContainer>
               <Investor />
             </ImgContainer>
             <TxtContainer>
-              <h1>
-                <span> Lorem ipsum </span> dolor sit amet consectetur
-                adipisicing elit.
-              </h1>
-              <h3>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Placeat, beatae autem quis voluptates unde vitae.
-              </h3>
-              <button onClick={() => console.log("oi")}>BOTÃO</button>
+              <Suspense fallback="Personalizing content...">
+                {/* Using the <Slot /> component */}
+                <Slot id="home-banner" fallback={fallbackBanner}>
+                  {({ title, subtitle, cta }: HomeBanner) => (
+                    <div>
+                      <h1>
+                        <strong>{title}</strong>
+                      </h1>
+                      <h3>
+                        <p>{subtitle}</p>
+                      </h3>
+                      <a href={cta.link}>{cta.label}</a>
+                    </div>
+                  )}
+                </Slot>
+              </Suspense>
             </TxtContainer>
           </HomeContainer>
         </div>
@@ -98,6 +156,69 @@ export const Title = styled.div`
   font-size: 45px;
   color: ${(props) => props.theme.colors.search});
 `;
+export const ButtonHeaderContainer = styled.div`
+  margin-top: 45px;
+  margin-bottom: 25px;
+
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  @media only screen and (max-width: 820px) {
+    margin-top: 15px;
+    margin-bottom: -70px;
+  }
+  @media only screen and (max-width: 414px) {
+    margin-top: 15px;
+    margin-bottom: -70px;
+  }
+  @media only screen and (max-width: 375px) {
+    margin-top: 15px;
+    margin-bottom: -70px;
+  }
+
+  @media only screen and (max-width: 280px) {
+    margin-top: 15px;
+    margin-bottom: -70px;
+  }
+`;
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  width: 50%;
+
+  button {
+    margin-right: 15px;
+    margin-top: 15px;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    color: ${(props) => props.theme.colors.background};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    padding: 0 35px;
+    cursor: pointer;
+    background: ${(props) => props.theme.colors.terciary};
+    border-radius: 5px;
+  }
+  @media only screen and (max-width: 820px) {
+    flex-direction: column;
+  }
+  @media only screen and (max-width: 414px) {
+    flex-direction: column;
+  }
+  @media only screen and (max-width: 375px) {
+    flex-direction: column;
+  }
+
+  @media only screen and (max-width: 280px) {
+    flex-direction: column;
+  }
+`;
 export const Header = styled.div`
   padding: 0 50px;
   width: 100%;
@@ -105,10 +226,10 @@ export const Header = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-size: 25px;
-  color: ${(props) => props.theme.colors.primary};
-  background: ${(props) => props.theme.colors.search});
-
+  font-size: 40px;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.terciary};
+  background: ${(props) => props.theme.colors.primary};
 `;
 export const ImgContainer = styled.div`
   display: flex;
@@ -154,18 +275,20 @@ export const TxtContainer = styled.div`
   width: 100%;
   padding: 50px;
   text-align: center;
-  color: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.secundary};
   span {
     color: ${(props) => props.theme.colors.search};
   }
   h3 {
     margin-top: 25px;
+    color: ${(props) => props.theme.colors.terciary};
   }
-  button {
+  a {
+    text-decoration: none;
     outline: none;
     border: none;
     font-weight: bold;
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.background};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -173,9 +296,10 @@ export const TxtContainer = styled.div`
     height: 40px;
     width: 100%;
     cursor: pointer;
-    background: ${(props) => props.theme.colors.search};
+    background: ${(props) => props.theme.colors.terciary};
     border-radius: 5px;
   }
+
   @media only screen and (max-width: 1280px) {
     padding: 0px;
   }
