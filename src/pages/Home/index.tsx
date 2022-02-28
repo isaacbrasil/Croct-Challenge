@@ -196,7 +196,6 @@ export const HomeContainer = styled.div`
 `;
 export const Title = styled.div`
   font-size: 45px;
-  color: ${(props) => props.theme.colors.search});
 `;
 export const ButtonHeaderContainer = styled.div`
   margin-top: 45px;
@@ -206,6 +205,24 @@ export const ButtonHeaderContainer = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
+  select {
+    // A reset of styles, including removing the default dropdown arrow
+    appearance: none;
+    // Additional resets for further consistency
+    background-color: ${(props) => props.theme.colors.background};
+    color: ${(props) => props.theme.colors.terciary};
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    outline: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    line-height: inherit;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
   @media only screen and (max-width: 820px) {
     margin-top: 15px;
     margin-bottom: -70px;
