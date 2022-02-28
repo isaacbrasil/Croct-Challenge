@@ -1,4 +1,10 @@
-import React, { Fragment, useCallback, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useState,
+  ReactElement,
+  Suspense,
+} from "react";
 import GlobalStyle from "../../styles/global";
 import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
@@ -14,18 +20,49 @@ import {
   useContent,
   useCroct,
 } from "@croct/plug-react";
-import { ReactElement, Suspense } from "react";
 
-const fallbackBanner: HomeBanner = {
-  title: "Default title",
-  subtitle: "Default subtitle",
+import { SlotContent } from "@croct/plug/fetch";
+import PersonaSelector from "../../components/PersonaSelector";
+import { Logo } from "../../assets/Logo";
+
+type SlotProps = SlotContent<"home-banner"> & {
+  loading?: boolean;
+};
+
+const defaultContent: SlotProps = {
+  title: "Experience up to 20% more revenue faster",
+  subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
   cta: {
-    label: "Try now",
-    link: "https://croct.com",
+    label: "Discover how",
+    link: "https://croct.link/demo",
   },
 };
 
+const initialContent: SlotProps = {
+  ...defaultContent,
+  loading: true,
+};
+
+type HomeBannerProps = {
+  cacheKey?: string;
+};
+
+function Greetings(): void {
+  const croct = useCroct();
+  croct
+    .evaluate(`user's stats' sessions`)
+    .then((count) => alert(`Visits: ${count}`));
+}
+
+function ViewDocsLink(): ReactElement {
+  const isDeveloper = useEvaluation<boolean>("user's persona is 'developer'", {
+    fallback: false,
+  });
+
+  return <Fragment>{isDeveloper && <a href="/docs">View docs</a>}</Fragment>;
+}
 type HomeBanner = {
+  id: string;
   title: string;
   subtitle: string;
   cta: {
@@ -34,32 +71,24 @@ type HomeBanner = {
   };
 };
 
-function DeveloperButton(): ReactElement {
-  const croct = useCroct();
-  const setPersona = useCallback(
-    () => croct.user.edit().set("custom.persona", "developer").save(),
-    [croct]
-  );
-  return <button onClick={setPersona}>I'm a developer</button>;
-}
-
-function MarketerButton(): ReactElement {
-  const croct = useCroct();
-  const setPersona = useCallback(
-    () => croct.user.edit().set("custom.persona", "marketer").save(),
-    [croct]
-  );
-  return <button onClick={setPersona}>I'm a marketer</button>;
-}
-function HackerButton(): ReactElement {
-  const croct = useCroct();
-  const setPersona = useCallback(
-    () => croct.user.edit().set("custom.persona", "hacker").save(),
-    [croct]
-  );
-  return <button onClick={setPersona}>I'm a hacker</button>;
-}
-
+const fallbackBanner: HomeBanner = {
+  id: "test-id",
+  title: "Default title",
+  subtitle: "Default subtitle",
+  cta: {
+    label: "Try now",
+    link: "https://croct.com",
+  },
+};
+const testBanner: HomeBanner = {
+  id: "test-banner",
+  title: "Titulo teste",
+  subtitle: "Subtítulo teste",
+  cta: {
+    label: "Teste Agora",
+    link: "https://croct.com",
+  },
+};
 function Home(): ReactElement {
   const [theme, setTheme] = useState(light);
 
@@ -73,23 +102,18 @@ function Home(): ReactElement {
         <div className="App">
           <GlobalStyle />
           <Header>
-            Croct
+            <Logo />
             <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
           </Header>
           <ButtonHeaderContainer>
-            <ButtonContainer>
-              <DeveloperButton />
-              <MarketerButton />
-              <HackerButton />
-            </ButtonContainer>
+            <PersonaSelector /> {/*escolhe a persona*/}
           </ButtonHeaderContainer>
           <HomeContainer>
             <ImgContainer>
               <Investor />
             </ImgContainer>
             <TxtContainer>
-              <Suspense fallback="Personalizing content...">
-                {/* Using the <Slot /> component */}
+              {/* <Suspense fallback="Personalizing content...">
                 <Slot id="home-banner" fallback={fallbackBanner}>
                   {({ title, subtitle, cta }: HomeBanner) => (
                     <div>
@@ -100,6 +124,24 @@ function Home(): ReactElement {
                         <p>{subtitle}</p>
                       </h3>
                       <a href={cta.link}>{cta.label}</a>
+                    </div>
+                  )}
+                </Slot>
+              </Suspense> */}
+
+              <Suspense fallback="✨ Personalizing content...">
+                <Slot
+                  id="home-banner"
+                  initial={initialContent}
+                  fallback={defaultContent}
+                >
+                  {({ loading, title, subtitle, cta }: SlotProps) => (
+                    <div className={`hero${loading ? " loading" : ""}`}>
+                      <h1>{title}</h1>
+                      <p className="subtitle">{subtitle}</p>
+                      <a href={cta.link} className="cta">
+                        {cta.label}
+                      </a>
                     </div>
                   )}
                 </Slot>
@@ -296,7 +338,7 @@ export const TxtContainer = styled.div`
     height: 40px;
     width: 100%;
     cursor: pointer;
-    background: ${(props) => props.theme.colors.terciary};
+    background: ${(props) => props.theme.colors.secundary};
     border-radius: 5px;
   }
 
