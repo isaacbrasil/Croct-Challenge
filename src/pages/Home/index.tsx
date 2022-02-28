@@ -28,7 +28,9 @@ import { Logo } from "../../assets/Logo";
 type SlotProps = SlotContent<"home-banner"> & {
   loading?: boolean;
 };
-
+type SlotProps2 = SlotContent<"home-banner2"> & {
+  loading?: boolean;
+};
 const defaultContent: SlotProps = {
   title: "Experience up to 20% more revenue faster",
   subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
@@ -38,6 +40,15 @@ const defaultContent: SlotProps = {
   },
 };
 
+const testContent: SlotProps2 = {
+  img: "https://images.unsplash.com/photo-1646061632529-b552ea07b50b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+  title: "Experience up to 20% more revenue faster",
+  subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
+  cta: {
+    label: "Discover how",
+    link: "https://croct.link/demo",
+  },
+};
 const initialContent: SlotProps = {
   ...defaultContent,
   loading: true,
@@ -108,12 +119,12 @@ function Home(): ReactElement {
           <ButtonHeaderContainer>
             <PersonaSelector /> {/*escolhe a persona*/}
           </ButtonHeaderContainer>
-          <HomeContainer>
-            <ImgContainer>
+          {/* <HomeContainer> */}
+          {/* <ImgContainer>
               <Investor />
-            </ImgContainer>
-            <TxtContainer>
-              {/* <Suspense fallback="Personalizing content...">
+            </ImgContainer> */}
+          <TxtContainer>
+            {/* <Suspense fallback="Personalizing content...">
                 <Slot id="home-banner" fallback={fallbackBanner}>
                   {({ title, subtitle, cta }: HomeBanner) => (
                     <div>
@@ -129,25 +140,32 @@ function Home(): ReactElement {
                 </Slot>
               </Suspense> */}
 
-              <Suspense fallback="✨ Personalizing content...">
-                <Slot
-                  id="home-banner"
-                  initial={initialContent}
-                  fallback={defaultContent}
-                >
-                  {({ loading, title, subtitle, cta }: SlotProps) => (
-                    <div className={`hero${loading ? " loading" : ""}`}>
-                      <h1>{title}</h1>
-                      <p className="subtitle">{subtitle}</p>
-                      <a href={cta.link} className="cta">
-                        {cta.label}
-                      </a>
-                    </div>
-                  )}
-                </Slot>
-              </Suspense>
-            </TxtContainer>
-          </HomeContainer>
+            <Suspense fallback="✨ Personalizing content...">
+              <Slot
+                id="home-banner2"
+                initial={testContent}
+                fallback={testContent}
+              >
+                {({ img, loading, title, subtitle, cta }: SlotProps2) => (
+                  <div className={`hero${loading ? " loading" : ""}`}>
+                    <HomeContainer>
+                      <ImgContainer>
+                        <img src={img} alt="" />
+                      </ImgContainer>
+                      <TxtContainer>
+                        <h1>{title}</h1>
+                        <p className="subtitle">{subtitle}</p>
+                        <a href={cta.link} className="cta">
+                          {cta.label}
+                        </a>
+                      </TxtContainer>
+                    </HomeContainer>
+                  </div>
+                )}
+              </Slot>
+            </Suspense>
+          </TxtContainer>
+          {/* </HomeContainer> */}
         </div>
       </ThemeProvider>
     </CroctProvider>
@@ -293,9 +311,18 @@ export const ImgContainer = styled.div`
   svg {
     height: 450px;
   }
+  img {
+    padding: 50px;
+    height: 250px;
+  }
 
   @media only screen and (max-width: 912px) {
     svg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -305,9 +332,15 @@ export const ImgContainer = styled.div`
     svg {
       margin-bottom: -120px;
     }
+    img {
+      margin-bottom: -120px;
+    }
   }
   @media only screen and (max-width: 414px) {
     svg {
+      margin-bottom: -150px;
+    }
+    img {
       margin-bottom: -150px;
     }
   }
@@ -315,9 +348,15 @@ export const ImgContainer = styled.div`
     svg {
       margin-bottom: -150px;
     }
+    img {
+      margin-bottom: -150px;
+    }
   }
   @media only screen and (max-width: 280px) {
     svg {
+      margin-bottom: -250px;
+    }
+    img {
       margin-bottom: -250px;
     }
   }
