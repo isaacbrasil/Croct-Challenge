@@ -4,6 +4,7 @@ import React, {
   useState,
   ReactElement,
   Suspense,
+  FunctionComponent,
 } from "react";
 import GlobalStyle from "../../styles/global";
 import styled from "styled-components";
@@ -81,6 +82,9 @@ type HomeBanner = {
     link: string;
   };
 };
+type PersonaSelectorProps = {
+  cacheKey?: string;
+};
 
 const fallbackBanner: HomeBanner = {
   title: "Default title",
@@ -99,7 +103,9 @@ const fallbackBanner: HomeBanner = {
 //     link: "https://croct.com",
 //   },
 // };
-function Home(): ReactElement {
+const Home: FunctionComponent<PersonaSelectorProps> = ({
+  cacheKey,
+}): ReactElement => {
   const [theme, setTheme] = useState(light);
 
   const toggleTheme = () => {
@@ -128,7 +134,7 @@ function Home(): ReactElement {
                 <div className={`hero${loading ? " loading" : ""}`}>
                   <HomeContainer>
                     <ImgContainer>
-                      <Investor />
+                      <Dev />
                     </ImgContainer>
                     <TxtContainer>
                       <h1>{title}</h1>
@@ -146,7 +152,7 @@ function Home(): ReactElement {
       </ThemeProvider>
     </CroctProvider>
   );
-}
+};
 
 export default Home;
 
@@ -282,15 +288,16 @@ export const Header = styled.div`
 `;
 export const ImgContainer = styled.div`
   display: flex;
-  width: 40%;
   svg {
     padding: 0px;
     height: 250px;
   }
 
   @media only screen and (max-width: 1024px) {
+    width: 618px;
     svg {
-      padding: 80px;
+      padding: 0px;
+
       margin-bottom: -120px;
     }
   }
@@ -299,6 +306,7 @@ export const ImgContainer = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: -20px;
     }
     img {
       display: flex;
@@ -316,6 +324,7 @@ export const ImgContainer = styled.div`
   }
   @media only screen and (max-width: 414px) {
     svg {
+      padding: 0px;
       margin-bottom: -150px;
     }
     img {
@@ -332,7 +341,7 @@ export const ImgContainer = styled.div`
   }
   @media only screen and (max-width: 280px) {
     svg {
-      margin-bottom: -250px;
+      margin-bottom: -150px;
       padding: 0px;
     }
     img {
