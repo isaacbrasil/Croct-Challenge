@@ -1,4 +1,6 @@
 import { NullableJsonObject } from "@croct/plug/sdk/json";
+import { ReactComponentElement, ReactNode } from "react";
+import { JsxElement } from "typescript";
 
 declare module "@croct/plug/fetch" {
   type SlotProps = {
@@ -10,7 +12,7 @@ declare module "@croct/plug/fetch" {
     };
   };
   type SlotProps2 = {
-    img: string;
+    svg: JSX.Element;
     title: string;
     subtitle: string;
     cta: {

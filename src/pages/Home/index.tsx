@@ -24,6 +24,7 @@ import {
 import { SlotContent } from "@croct/plug/fetch";
 import PersonaSelector from "../../components/PersonaSelector";
 import { Logo } from "../../assets/Logo";
+import { Dev } from "../../assets/Dev";
 
 type SlotProps = SlotContent<"home-banner"> & {
   loading?: boolean;
@@ -41,7 +42,7 @@ const defaultContent: SlotProps = {
 };
 
 const testContent: SlotProps2 = {
-  img: "https://images.unsplash.com/photo-1646061632529-b552ea07b50b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
+  svg: <Investor />,
   title: "Experience up to 20% more revenue faster",
   subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
   cta: {
@@ -73,7 +74,6 @@ function ViewDocsLink(): ReactElement {
   return <Fragment>{isDeveloper && <a href="/docs">View docs</a>}</Fragment>;
 }
 type HomeBanner = {
-  id: string;
   title: string;
   subtitle: string;
   cta: {
@@ -83,7 +83,6 @@ type HomeBanner = {
 };
 
 const fallbackBanner: HomeBanner = {
-  id: "test-id",
   title: "Default title",
   subtitle: "Default subtitle",
   cta: {
@@ -91,15 +90,15 @@ const fallbackBanner: HomeBanner = {
     link: "https://croct.com",
   },
 };
-const testBanner: HomeBanner = {
-  id: "test-banner",
-  title: "Titulo teste",
-  subtitle: "Subtítulo teste",
-  cta: {
-    label: "Teste Agora",
-    link: "https://croct.com",
-  },
-};
+// const testBanner: HomeBanner = {
+//   id: "test-banner",
+//   title: "Titulo teste",
+//   subtitle: "Subtítulo teste",
+//   cta: {
+//     label: "Teste Agora",
+//     link: "https://croct.com",
+//   },
+// };
 function Home(): ReactElement {
   const [theme, setTheme] = useState(light);
 
@@ -119,12 +118,12 @@ function Home(): ReactElement {
           <ButtonHeaderContainer>
             <PersonaSelector /> {/*escolhe a persona*/}
           </ButtonHeaderContainer>
-          {/* <HomeContainer> */}
-          {/* <ImgContainer>
+          <HomeContainer>
+            {/* <ImgContainer>
               <Investor />
-            </ImgContainer> */}
-          <TxtContainer>
-            {/* <Suspense fallback="Personalizing content...">
+            </ImgContainer>
+            <TxtContainer>
+              <Suspense fallback="Personalizing content...">
                 <Slot id="home-banner" fallback={fallbackBanner}>
                   {({ title, subtitle, cta }: HomeBanner) => (
                     <div>
@@ -146,11 +145,11 @@ function Home(): ReactElement {
                 initial={testContent}
                 fallback={testContent}
               >
-                {({ img, loading, title, subtitle, cta }: SlotProps2) => (
+                {({ svg, loading, title, subtitle, cta }: SlotProps2) => (
                   <div className={`hero${loading ? " loading" : ""}`}>
                     <HomeContainer>
                       <ImgContainer>
-                        <img src={img} alt="" />
+                        <Investor />
                       </ImgContainer>
                       <TxtContainer>
                         <h1>{title}</h1>
@@ -164,8 +163,8 @@ function Home(): ReactElement {
                 )}
               </Slot>
             </Suspense>
-          </TxtContainer>
-          {/* </HomeContainer> */}
+            {/* </TxtContainer> */}
+          </HomeContainer>
         </div>
       </ThemeProvider>
     </CroctProvider>
@@ -306,14 +305,9 @@ export const Header = styled.div`
 `;
 export const ImgContainer = styled.div`
   display: flex;
-  width: 100%;
-
   svg {
+    padding: 10px;
     height: 450px;
-  }
-  img {
-    padding: 50px;
-    height: 250px;
   }
 
   @media only screen and (max-width: 912px) {
