@@ -118,53 +118,30 @@ function Home(): ReactElement {
           <ButtonHeaderContainer>
             <PersonaSelector /> {/*escolhe a persona*/}
           </ButtonHeaderContainer>
-          <HomeContainer>
-            {/* <ImgContainer>
-              <Investor />
-            </ImgContainer>
-            <TxtContainer>
-              <Suspense fallback="Personalizing content...">
-                <Slot id="home-banner" fallback={fallbackBanner}>
-                  {({ title, subtitle, cta }: HomeBanner) => (
-                    <div>
-                      <h1>
-                        <strong>{title}</strong>
-                      </h1>
-                      <h3>
-                        <p>{subtitle}</p>
-                      </h3>
-                      <a href={cta.link}>{cta.label}</a>
-                    </div>
-                  )}
-                </Slot>
-              </Suspense> */}
-
-            <Suspense fallback="✨ Personalizing content...">
-              <Slot
-                id="home-banner2"
-                initial={testContent}
-                fallback={testContent}
-              >
-                {({ svg, loading, title, subtitle, cta }: SlotProps2) => (
-                  <div className={`hero${loading ? " loading" : ""}`}>
-                    <HomeContainer>
-                      <ImgContainer>
-                        <Investor />
-                      </ImgContainer>
-                      <TxtContainer>
-                        <h1>{title}</h1>
-                        <p className="subtitle">{subtitle}</p>
-                        <a href={cta.link} className="cta">
-                          {cta.label}
-                        </a>
-                      </TxtContainer>
-                    </HomeContainer>
-                  </div>
-                )}
-              </Slot>
-            </Suspense>
-            {/* </TxtContainer> */}
-          </HomeContainer>
+          <Suspense fallback="✨ Personalizing content...">
+            <Slot
+              id="home-banner2"
+              initial={testContent}
+              fallback={testContent}
+            >
+              {({ svg, loading, title, subtitle, cta }: SlotProps2) => (
+                <div className={`hero${loading ? " loading" : ""}`}>
+                  <HomeContainer>
+                    <ImgContainer>
+                      <Investor />
+                    </ImgContainer>
+                    <TxtContainer>
+                      <h1>{title}</h1>
+                      <p className="subtitle">{subtitle}</p>
+                      <a href={cta.link} className="cta">
+                        {cta.label}
+                      </a>
+                    </TxtContainer>
+                  </HomeContainer>
+                </div>
+              )}
+            </Slot>
+          </Suspense>
         </div>
       </ThemeProvider>
     </CroctProvider>
@@ -188,7 +165,7 @@ export const HomeContainer = styled.div`
   @media only screen and (max-width: 912px) {
     margin-top: 150px;
     flex-direction: column;
-    padding: 30px;
+    padding: 10px;
   }
   @media only screen and (max-width: 820px) {
     margin-top: 70px;
@@ -197,18 +174,18 @@ export const HomeContainer = styled.div`
   @media only screen and (max-width: 414px) {
     margin-top: 0px;
     flex-direction: column;
-    padding: 30px;
+    padding: 20px;
   }
   @media only screen and (max-width: 375px) {
     margin-top: 0px;
     flex-direction: column;
-    padding: 30px;
+    padding: 10px;
   }
 
   @media only screen and (max-width: 280px) {
     display: flex;
     flex-direction: column;
-    padding: 30px;
+    padding: 10px;
   }
 `;
 export const Title = styled.div`
@@ -305,11 +282,18 @@ export const Header = styled.div`
 `;
 export const ImgContainer = styled.div`
   display: flex;
+  width: 40%;
   svg {
-    padding: 10px;
-    height: 450px;
+    padding: 0px;
+    height: 250px;
   }
 
+  @media only screen and (max-width: 1024px) {
+    svg {
+      padding: 80px;
+      margin-bottom: -120px;
+    }
+  }
   @media only screen and (max-width: 912px) {
     svg {
       display: flex;
@@ -349,6 +333,7 @@ export const ImgContainer = styled.div`
   @media only screen and (max-width: 280px) {
     svg {
       margin-bottom: -250px;
+      padding: 0px;
     }
     img {
       margin-bottom: -250px;
