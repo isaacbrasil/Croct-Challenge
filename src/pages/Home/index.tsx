@@ -21,7 +21,6 @@ import {
   useContent,
   useCroct,
 } from "@croct/plug-react";
-
 import { SlotContent } from "@croct/plug/fetch";
 import PersonaSelector from "../../components/PersonaSelector";
 import { Logo } from "../../assets/Logo";
@@ -43,7 +42,7 @@ const defaultContent: SlotProps = {
 };
 
 const testContent: SlotProps2 = {
-  svg: <Investor />,
+  svg: <Dev />,
   title: "Experience up to 20% more revenue faster",
   subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
   cta: {
@@ -111,7 +110,7 @@ const Home: FunctionComponent<PersonaSelectorProps> = ({
   const toggleTheme = () => {
     setTheme(theme.title === "light" ? dark : light);
   };
-
+  const teste = "home-banner2";
   return (
     <CroctProvider appId="00000000-0000-0000-0000-000000000000">
       <ThemeProvider theme={theme}>
@@ -125,17 +124,11 @@ const Home: FunctionComponent<PersonaSelectorProps> = ({
             <PersonaSelector /> {/*escolhe a persona*/}
           </ButtonHeaderContainer>
           <Suspense fallback="✨ Personalizing content...">
-            <Slot
-              id="home-banner2"
-              initial={testContent}
-              fallback={testContent}
-            >
+            <Slot id={teste} initial={testContent} fallback={testContent}>
               {({ svg, loading, title, subtitle, cta }: SlotProps2) => (
                 <div className={`hero${loading ? " loading" : ""}`}>
                   <HomeContainer>
-                    <ImgContainer>
-                      <Dev />
-                    </ImgContainer>
+                    <ImgContainer>{svg}</ImgContainer>
                     <TxtContainer>
                       <h1>{title}</h1>
                       <p className="subtitle">{subtitle}</p>
@@ -302,6 +295,10 @@ export const ImgContainer = styled.div`
     }
   }
   @media only screen and (max-width: 912px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     svg {
       display: flex;
       align-items: center;
@@ -323,6 +320,10 @@ export const ImgContainer = styled.div`
     }
   }
   @media only screen and (max-width: 414px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     svg {
       padding: 0px;
       margin-bottom: -150px;
@@ -332,6 +333,11 @@ export const ImgContainer = styled.div`
     }
   }
   @media only screen and (max-width: 375px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
     svg {
       margin-bottom: -150px;
     }
