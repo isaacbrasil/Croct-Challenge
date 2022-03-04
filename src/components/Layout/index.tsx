@@ -27,6 +27,7 @@ import { SlotContent } from "@croct/plug/fetch";
 import PersonaSelector from "../../components/PersonaSelector";
 import { Logo } from "../../assets/Logo";
 import { Dev } from "../../assets/Dev";
+import { math } from "polished";
 
 type Persona = "marketer" | "developer" | "growth-hacker" | "default";
 
@@ -126,7 +127,7 @@ const LayoutsComponent = () => {
   );
 
   const setPersona = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) => {
+    (event: any) => {
       const patch = croct.user.edit();
       console.log("event: ", event);
 
@@ -144,22 +145,40 @@ const LayoutsComponent = () => {
   );
 
   console.log(slot);
+  console.log("persona:", persona);
+  // const handlePersona = (event: any) => {
+  //   console.log(event.target.value);
+  //   if (event.target.value === "default") {
+  //     setSlot(defaultContent);
+  //   }
+  //   if (event.target.value === "marketer") {
+  //     setSlot(marketerPersona);
+  //   }
+  //   if (event.target.value === "growth-hacker") {
+  //     setSlot(hackerPersona);
+  //   }
+  //   if (event.target.value === "developer") {
+  //     setSlot(developerPersona);
+  //   }
+  // };
+  const personaValues = ["default", "marketer", "growth-hacker", "developer"];
 
-  const handlePersona = (event: ChangeEvent<HTMLSelectElement>) => {
-    console.log(event.target.value);
-    if (event.target.value === "default") {
+  useEffect(() => {
+    const randomScreen = Math.floor(Math.random() * personaValues.length); //This is an alternative to get the persona value, emulating an API return of the user
+    const screen = personaValues[randomScreen];
+    if (screen === "default") {
       setSlot(defaultContent);
     }
-    if (event.target.value === "marketer") {
+    if (screen === "marketer") {
       setSlot(marketerPersona);
     }
-    if (event.target.value === "growth-hacker") {
+    if (screen === "growth-hacker") {
       setSlot(hackerPersona);
     }
-    if (event.target.value === "developer") {
+    if (screen === "developer") {
       setSlot(developerPersona);
     }
-  };
+  }, [personaValues.length]);
 
   return (
     <div>
@@ -171,7 +190,8 @@ const LayoutsComponent = () => {
             <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
           </Header>
           <ButtonHeaderContainer>
-            <div className="persona-selector">
+            {/*This is an alternative using select to get the persona value */}
+            {/* <div className="persona-selector">
               {persona && (
                 <div className="select">
                   <select defaultValue={persona} onChange={handlePersona}>
@@ -182,7 +202,7 @@ const LayoutsComponent = () => {
                   </select>
                 </div>
               )}
-            </div>
+            </div> */}
           </ButtonHeaderContainer>
           <Suspense fallback="✨ Personalizing content...">
             <Slot id={teste} initial={slot} fallback={slot}>
