@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import { shade } from "polished";
+import React, { useContext } from "react";
 import Switch from "react-switch";
 import styled, { ThemeContext } from "styled-components";
-import { shade } from "polished";
 
 interface Props {
   toggleTheme(): void;
@@ -21,8 +21,8 @@ const SwitchComponent: React.FC<Props> = ({ toggleTheme }) => {
           height={10}
           width={40}
           handleDiameter={15}
-          offColor={shade(0.15, colors.primary)}
-          onColor={colors.secundary}
+          offColor={shade(0.15, colors.background)}
+          onColor={colors.background}
         />
       </Container>
     </>
