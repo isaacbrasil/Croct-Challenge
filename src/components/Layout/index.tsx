@@ -177,7 +177,7 @@ export default LayoutsComponent;
 
 export const HomeContainer = styled.div`
   display: flex;
-  padding: 150px;
+  padding: 200px 120px 10px 20px;
 
   @media only screen and (max-width: 1280px) {
     margin-top: 50px;
