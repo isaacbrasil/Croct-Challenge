@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useState,
   ReactElement,
+  ChangeEvent,
   Suspense,
   FunctionComponent,
 } from "react";
@@ -22,9 +23,12 @@ import {
   useCroct,
 } from "@croct/plug-react";
 import { SlotContent } from "@croct/plug/fetch";
-import PersonaSelector from "../../components/PersonaSelector";
+// import PersonaSelector from "../../components/PersonaSelector";
 import { Logo } from "../../assets/Logo";
 import { Dev } from "../../assets/Dev";
+import LayoutsComponent from "../../components/Layout";
+
+type Persona = "marketer" | "developer" | "growth-hacker" | "default";
 
 type SlotProps = SlotContent<"home-banner"> & {
   loading?: boolean;
@@ -43,10 +47,21 @@ const defaultContent: SlotProps = {
 
 const testContent: SlotProps2 = {
   svg: <Dev />,
-  title: "Experience up to 20% more revenue faster",
-  subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
+  title: "Become your marketing team's best friend",
+  subtitle:
+    "Build rich user experiences that are easy for your team to evolve and maintain.",
   cta: {
-    label: "Discover how",
+    label: "Watch our tutorial",
+    link: "https://croct.link/demo",
+  },
+};
+const testContent2: SlotProps2 = {
+  svg: <Investor />,
+  title: "Get more out of yout marketing investment!",
+  subtitle:
+    "Optimize your digital customer experience to drive more sales and happier customers.",
+  cta: {
+    label: "Book a demo",
     link: "https://croct.link/demo",
   },
 };
@@ -59,20 +74,6 @@ type HomeBannerProps = {
   cacheKey?: string;
 };
 
-function Greetings(): void {
-  const croct = useCroct();
-  croct
-    .evaluate(`user's stats' sessions`)
-    .then((count) => alert(`Visits: ${count}`));
-}
-
-function ViewDocsLink(): ReactElement {
-  const isDeveloper = useEvaluation<boolean>("user's persona is 'developer'", {
-    fallback: false,
-  });
-
-  return <Fragment>{isDeveloper && <a href="/docs">View docs</a>}</Fragment>;
-}
 type HomeBanner = {
   title: string;
   subtitle: string;
@@ -93,15 +94,7 @@ const fallbackBanner: HomeBanner = {
     link: "https://croct.com",
   },
 };
-// const testBanner: HomeBanner = {
-//   id: "test-banner",
-//   title: "Titulo teste",
-//   subtitle: "Subtítulo teste",
-//   cta: {
-//     label: "Teste Agora",
-//     link: "https://croct.com",
-//   },
-// };
+
 const Home: FunctionComponent<PersonaSelectorProps> = ({
   cacheKey,
 }): ReactElement => {
@@ -111,300 +104,12 @@ const Home: FunctionComponent<PersonaSelectorProps> = ({
     setTheme(theme.title === "light" ? dark : light);
   };
   const teste = "home-banner2";
+
   return (
     <CroctProvider appId="00000000-0000-0000-0000-000000000000">
-      <ThemeProvider theme={theme}>
-        <div className="App">
-          <GlobalStyle />
-          <Header>
-            <Logo />
-            <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
-          </Header>
-          <ButtonHeaderContainer>
-            <PersonaSelector /> {/*escolhe a persona*/}
-          </ButtonHeaderContainer>
-          <Suspense fallback="✨ Personalizing content...">
-            <Slot id={teste} initial={testContent} fallback={testContent}>
-              {({ svg, loading, title, subtitle, cta }: SlotProps2) => (
-                <div className={`hero${loading ? " loading" : ""}`}>
-                  <HomeContainer>
-                    <ImgContainer>{svg}</ImgContainer>
-                    <TxtContainer>
-                      <h1>{title}</h1>
-                      <p className="subtitle">{subtitle}</p>
-                      <a href={cta.link} className="cta">
-                        {cta.label}
-                      </a>
-                    </TxtContainer>
-                  </HomeContainer>
-                </div>
-              )}
-            </Slot>
-          </Suspense>
-        </div>
-      </ThemeProvider>
+      <LayoutsComponent />
     </CroctProvider>
   );
 };
 
 export default Home;
-
-export const HomeContainer = styled.div`
-  display: flex;
-  padding: 150px;
-
-  @media only screen and (max-width: 1280px) {
-    margin-top: 50px;
-    padding: 50px;
-  }
-  @media only screen and (max-width: 1024px) {
-    padding: 30px;
-    margin-top: 0px;
-  }
-  @media only screen and (max-width: 912px) {
-    margin-top: 150px;
-    flex-direction: column;
-    padding: 10px;
-  }
-  @media only screen and (max-width: 820px) {
-    margin-top: 70px;
-    flex-direction: column;
-  }
-  @media only screen and (max-width: 414px) {
-    margin-top: 0px;
-    flex-direction: column;
-    padding: 20px;
-  }
-  @media only screen and (max-width: 375px) {
-    margin-top: 0px;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  @media only screen and (max-width: 280px) {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-`;
-export const Title = styled.div`
-  font-size: 45px;
-`;
-export const ButtonHeaderContainer = styled.div`
-  margin-top: 45px;
-  margin-bottom: 25px;
-
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  select {
-    // A reset of styles, including removing the default dropdown arrow
-    appearance: none;
-    // Additional resets for further consistency
-    background-color: ${(props) => props.theme.colors.background};
-    color: ${(props) => props.theme.colors.terciary};
-    border-radius: 5px;
-    border: none;
-    padding: 10px;
-    margin: 0;
-    width: 100%;
-    outline: none;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-    line-height: inherit;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-  @media only screen and (max-width: 820px) {
-    margin-top: 50px;
-  }
-  @media only screen and (max-width: 414px) {
-    margin-top: 50px;
-  }
-  @media only screen and (max-width: 375px) {
-    margin-top: 50px;
-  }
-
-  @media only screen and (max-width: 280px) {
-    margin-top: 50px;
-  }
-`;
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  width: 50%;
-
-  button {
-    margin-right: 15px;
-    margin-top: 15px;
-    outline: none;
-    border: none;
-    font-weight: bold;
-    color: ${(props) => props.theme.colors.background};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 100%;
-    padding: 0 35px;
-    cursor: pointer;
-    background: ${(props) => props.theme.colors.terciary};
-    border-radius: 5px;
-  }
-  @media only screen and (max-width: 820px) {
-    flex-direction: column;
-  }
-  @media only screen and (max-width: 414px) {
-    flex-direction: column;
-  }
-  @media only screen and (max-width: 375px) {
-    flex-direction: column;
-  }
-
-  @media only screen and (max-width: 280px) {
-    flex-direction: column;
-  }
-`;
-export const Header = styled.div`
-  padding: 0 50px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 40px;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.terciary};
-  background: ${(props) => props.theme.colors.primary};
-`;
-export const ImgContainer = styled.div`
-  display: flex;
-  svg {
-    padding: 0px;
-    height: 250px;
-  }
-
-  @media only screen and (max-width: 1024px) {
-    width: 618px;
-    svg {
-      padding: 0px;
-
-      margin-bottom: -120px;
-    }
-  }
-  @media only screen and (max-width: 912px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    svg {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: -20px;
-    }
-    img {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-  @media only screen and (max-width: 540px) {
-    svg {
-      margin-bottom: -120px;
-    }
-    img {
-      margin-bottom: -120px;
-    }
-  }
-  @media only screen and (max-width: 414px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    svg {
-      padding: 0px;
-      margin-bottom: -150px;
-    }
-    img {
-      margin-bottom: -150px;
-    }
-  }
-  @media only screen and (max-width: 375px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    svg {
-      margin-bottom: -150px;
-    }
-    img {
-      margin-bottom: -150px;
-    }
-  }
-  @media only screen and (max-width: 280px) {
-    svg {
-      margin-bottom: -150px;
-      padding: 0px;
-    }
-    img {
-      margin-bottom: -250px;
-    }
-  }
-`;
-export const TxtContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 50px;
-  text-align: center;
-  color: ${(props) => props.theme.colors.secundary};
-  span {
-    color: ${(props) => props.theme.colors.search};
-  }
-  h3 {
-    margin-top: 25px;
-    color: ${(props) => props.theme.colors.terciary};
-  }
-  a {
-    text-decoration: none;
-    outline: none;
-    border: none;
-    font-weight: bold;
-    color: ${(props) => props.theme.colors.background};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    height: 40px;
-    width: 100%;
-    cursor: pointer;
-    background: ${(props) => props.theme.colors.secundary};
-    border-radius: 5px;
-  }
-
-  @media only screen and (max-width: 1280px) {
-    padding: 0px;
-  }
-  @media only screen and (max-width: 1024px) {
-    padding: 0px;
-  }
-  @media only screen and (max-width: 912px) {
-    margin-top: 50px;
-  }
-  @media only screen and (max-width: 820px) {
-    margin-top: 150px;
-    padding: 10px;
-  }
-  @media only screen and (max-width: 414px) {
-    padding: 10px;
-  }
-  @media only screen and (max-width: 375px) {
-    padding: 10px;
-  }
-`;
