@@ -1,46 +1,24 @@
-import React, {
-  Fragment,
-  useCallback,
-  useState,
-  ReactElement,
-  ChangeEvent,
-  Suspense,
-  FunctionComponent,
-  useEffect,
-} from "react";
-import GlobalStyle from "../../styles/global";
-import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
-import light from "../../styles/themes/light";
-import dark from "../../styles/themes/dark";
-import SwitchComponent from "../../components/Switch";
-import { Investor } from "../../assets/Investor";
-import {
-  CroctProvider,
-  useEvaluation,
-  Personalization,
-  Slot,
-  useContent,
-  useCroct,
-} from "@croct/plug-react";
+import { Slot } from "@croct/plug-react";
 import { SlotContent } from "@croct/plug/fetch";
-import PersonaSelector from "../../components/PersonaSelector";
-import { Logo } from "../../assets/Logo";
+import React, { Suspense, useEffect, useState } from "react";
+import styled, { ThemeProvider, DefaultTheme } from "styled-components";
 import { Dev } from "../../assets/Dev";
-import { math } from "polished";
-
-type Persona = "marketer" | "developer" | "growth-hacker" | "default";
-
-type SlotProps = SlotContent<"home-banner"> & {
-  loading?: boolean;
-};
+import { Marketer } from "../../assets/Marketer";
+import { GrowthHacker } from "../../assets/GrowthHacker";
+import { Logo } from "../../assets/Logo";
+import SwitchComponent from "../../components/Switch";
+import GlobalStyle from "../../styles/global";
+import dark from "../../styles/themes/dark";
+import light from "../../styles/themes/light";
+import { Default } from "../../assets/Default";
+import usePersistedState from "../../utils/usePersistedState";
 type SlotProps2 = SlotContent<"home-banner2"> & {
   loading?: boolean;
 };
 const defaultContent: SlotProps2 = {
-  svg: <Dev />,
-  title: "Experience up to 20% more revenue faster",
-  subtitle: "Deliver tailored experiences that drive satisfaction and growth.",
+  svg: <Default />,
+  title: "This is a default text!",
+  subtitle: "This is a default subtitle information text.",
   cta: {
     label: "Discover how",
     link: "https://croct.link/demo",
@@ -58,7 +36,7 @@ const developerPersona: SlotProps2 = {
   },
 };
 const marketerPersona: SlotProps2 = {
-  svg: <Investor />,
+  svg: <Marketer />,
   title: "Get more out of yout marketing investment!",
   subtitle:
     "Optimize your digital customer experience to drive more sales and happier customers.",
@@ -68,47 +46,17 @@ const marketerPersona: SlotProps2 = {
   },
 };
 const hackerPersona: SlotProps2 = {
-  svg: <Investor />,
-  title: "HACKERR!",
-  subtitle:
-    "Optimize your digital customer experience to drive more sales and happier customers.",
+  svg: <GrowthHacker />,
+  title: "This is a default Growth Hacker text!",
+  subtitle: "This is a default Growth Hacker subtitle information text.",
   cta: {
-    label: "Book a demo",
+    label: "Know How ",
     link: "https://croct.link/demo",
-  },
-};
-const initialContent: SlotProps = {
-  ...defaultContent,
-  loading: true,
-};
-
-type HomeBannerProps = {
-  cacheKey?: string;
-};
-
-type HomeBanner = {
-  title: string;
-  subtitle: string;
-  cta: {
-    label: string;
-    link: string;
-  };
-};
-type PersonaSelectorProps = {
-  cacheKey?: string;
-};
-
-const fallbackBanner: HomeBanner = {
-  title: "Default title",
-  subtitle: "Default subtitle",
-  cta: {
-    label: "Try now",
-    link: "https://croct.com",
   },
 };
 
 const LayoutsComponent = () => {
-  const [theme, setTheme] = useState(light);
+  const [theme, setTheme] = usePersistedState("theme", light);
   const [slot, setSlot] = useState(defaultContent);
 
   const teste = "home-banner2";
@@ -117,35 +65,33 @@ const LayoutsComponent = () => {
     setTheme(theme.title === "light" ? dark : light);
   };
 
-  const croct = useCroct();
-  const persona = useEvaluation<Persona | null>(
-    "user's persona or else 'default'",
-    {
-      initial: null,
-      fallback: "default",
-    }
-  );
+  // const croct = useCroct();
+  // const persona = useEvaluation<Persona | null>(
+  //   "user's persona or else 'default'",
+  //   {
+  //     initial: null,
+  //     fallback: "default",
+  //   }
+  // );
 
-  const setPersona = useCallback(
-    (event: any) => {
-      const patch = croct.user.edit();
-      console.log("event: ", event);
+  // const setPersona = useCallback(
+  //   (event: any) => {
+  //     const patch = croct.user.edit();
 
-      if (event.target.value === "default") {
-        patch.unset("custom.persona");
-      } else {
-        patch.set("custom.persona", event.target.value);
-      }
+  //     if (event.target.value === "default") {
+  //       patch.unset("custom.persona");
+  //     } else {
+  //       patch.set("custom.persona", event.target.value);
+  //     }
 
-      patch
-        .save()
-        .then(() => window.setTimeout(() => window.location.reload(), 300));
-    },
-    [croct]
-  );
+  //     patch
+  //       .save()
+  //       .then(() => window.setTimeout(() => window.location.reload(), 300));
+  //   },
+  //   [croct]
+  // );
 
-  console.log(slot);
-  console.log("persona:", persona);
+  // handle function to be used with the select way
   // const handlePersona = (event: any) => {
   //   console.log(event.target.value);
   //   if (event.target.value === "default") {
@@ -164,7 +110,7 @@ const LayoutsComponent = () => {
   const personaValues = ["default", "marketer", "growth-hacker", "developer"];
 
   useEffect(() => {
-    const randomScreen = Math.floor(Math.random() * personaValues.length); //This is an alternative to get the persona value, emulating an API return of the user
+    const randomScreen = Math.floor(Math.random() * personaValues.length); //This is an alternative way to get the persona value, emulating an API return of the user and changing the layout at each reload of the page
     const screen = personaValues[randomScreen];
     if (screen === "default") {
       setSlot(defaultContent);
@@ -190,7 +136,7 @@ const LayoutsComponent = () => {
             <SwitchComponent toggleTheme={toggleTheme}></SwitchComponent>
           </Header>
           <ButtonHeaderContainer>
-            {/*This is an alternative using select to get the persona value */}
+            {/*This way I am using a select input to get the persona value and change the layout */}
             {/* <div className="persona-selector">
               {persona && (
                 <div className="select">
@@ -279,9 +225,7 @@ export const ButtonHeaderContainer = styled.div`
   align-items: center;
   justify-content: center;
   select {
-    // A reset of styles, including removing the default dropdown arrow
     appearance: none;
-    // Additional resets for further consistency
     background-color: ${(props) => props.theme.colors.background};
     color: ${(props) => props.theme.colors.terciary};
     border-radius: 5px;
